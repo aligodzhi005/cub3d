@@ -6,13 +6,13 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:20:27 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/19 16:01:34 by rvena            ###   ########.fr       */
+/*   Updated: 2021/03/21 16:41:12 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i)
+void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i, settings *settings)
 {
 	player_data *pl;
 	tex_data	*spr;
@@ -41,23 +41,23 @@ void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i)
 	transformX = invDet * (pl->dirY * spriteX - pl->dirX * spriteY);
 	transformY = invDet * (-1 * pl->planeY * spriteX + pl->planeX * spriteY);
 	
-	spriteScreenX = (int)((screenWidth / 2) * (1 + transformX / transformY));
-	spriteHeight = abs((int)(screenHeight / transformY));
+	spriteScreenX = (int)((settings->sW / 2) * (1 + transformX / transformY));
+	spriteHeight = abs((int)(settings->sH / transformY));
 	
-	drawStartY = -1 * spriteHeight / 2 + screenHeight / 2;
+	drawStartY = -1 * spriteHeight / 2 + settings->sH / 2;
 	if(drawStartY < 0)
 		drawStartY = 0;
-	drawEndY = spriteHeight / 2 + screenHeight / 2;
-	if (drawEndY >= screenHeight)
-		drawEndY = screenHeight - 1;
+	drawEndY = spriteHeight / 2 + settings->sH / 2;
+	if (drawEndY >= settings->sH)
+		drawEndY = settings->sH - 1;
 	
-	spriteWidth = abs((int)(screenWidth / (transformY)));
+	spriteWidth = abs((int)(settings->sW / (transformY)));
 	drawStartX = -1 * spriteWidth / 2 + spriteScreenX;
 	if (drawStartX < 0)
 		drawStartX = 0;
 	drawEndX = spriteWidth / 2 + spriteScreenX;
-	if (drawEndX >= screenWidth)
-		drawEndX = screenWidth - 1;
+	if (drawEndX >= settings->sW)
+		drawEndX = settings->sW - 1;
 
 	//Draw Sprite
 	//printf("\nDraw Sprite\n");
@@ -70,11 +70,11 @@ void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i)
 		//printf("sprite = %d\n", sprite);
 		int texX = (int)(256 * (sprite - (-1 * spriteWidth / 2 + spriteScreenX)) * ever->sprite1->texWidth / spriteWidth) / 256;
 		y = drawStartY;
-		if(transformY > 0 && sprite < screenWidth && transformY < ever->raycasting->Zbuffer[sprite])
+		if(transformY > 0 && sprite < settings->sW && transformY < ever->raycasting->Zbuffer[sprite])
 		while (y < drawEndY)
 		{
 			//printf("y = %d\n", y);
-			int d = y * 256 - screenHeight * 128 + spriteHeight * 128;
+			int d = y * 256 - settings->sH * 128 + spriteHeight * 128;
 			int texY = ((d * spr->texHeight) / spriteHeight) / 256;
 			color = spr->addr + (texY * spr->line_length + texX * (spr->bits_per_pixel / 8));
 			//printf("color = %d\n", *(int *)color);
@@ -86,7 +86,7 @@ void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i)
 	}
 }
 
-void	sortDist(all_data *ever, sprite_data *listOfSprites)
+void	sortDist(all_data *ever, sprite_data *listOfSprites, settings *settings)
 {
 	int		i;
 	int		j;
@@ -125,12 +125,12 @@ void	sortDist(all_data *ever, sprite_data *listOfSprites)
 	i = 0;
 	while (i < ever->numOfSprite)
 	{
-		setWidthHeight(ever, listOfSprites, i);
+		setWidthHeight(ever, listOfSprites, i, settings);
 		i++;
 	}
 }
 
-void	setAndSort(all_data *ever, sprite_data *listOfSprites)
+void	setAndSort(all_data *ever, sprite_data *listOfSprites, settings *settings)
 {
 	player_data *pl;
 	int j;
@@ -151,5 +151,5 @@ void	setAndSort(all_data *ever, sprite_data *listOfSprites)
 	// 	printf("spriteOrder[%d] = %d\n", i, ever->spriteOrder[i]);
 	// 	printf("spriteDist[%d] = %f\n", i, ever->spriteDist[i]);
 	// }
-	sortDist(ever, listOfSprites);
+	sortDist(ever, listOfSprites, settings);
 }

@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 13:54:15 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/20 19:39:50 by rvena            ###   ########.fr       */
+/*   Updated: 2021/03/21 16:46:12 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void    setBasRayPar3(ray_data *raycasting, player_data *player, char **map, int
     //printf("mapX = %d\nmapY = %d\n", raycasting->mapX, raycasting->mapY);
 }
 
-void    setBasRayPar2(ray_data *raycasting, player_data *player, char **map, int x)
+void    setBasRayPar2(ray_data *raycasting, player_data *player, char **map, int x, settings *settings)
 {
     if(raycasting->rayDirX < 0)
     {
@@ -76,20 +76,18 @@ void    setBasRayPar2(ray_data *raycasting, player_data *player, char **map, int
 
 
 
-void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map)
+void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map, settings *settings)
 {
-    raycasting->cameraX = 2 * x / (double)screenWidth - 1; //x-coordinate in camera space
-        raycasting->rayDirX = player->dirX + player->planeX * raycasting->cameraX;
-        raycasting->rayDirY = player->dirY + player->planeY * raycasting->cameraX;
-        
-
-        raycasting->mapX = (int)player->posX;
-        raycasting->mapY = (int)player->posY;
-
-        // raycasting->deltaDistX = fabs(1 / raycasting->rayDirX);
-        // raycasting->deltaDistY = fabs(1 / raycasting->rayDirY);
-        raycasting->deltaDistX = (raycasting->rayDirY == 0) ? 0 : ((raycasting->rayDirX == 0) ? 1 : fabs(1 / raycasting->rayDirX));
-        raycasting->deltaDistY = (raycasting->rayDirX == 0) ? 0 : ((raycasting->rayDirY == 0) ? 1 : fabs(1 / raycasting->rayDirY));
-        raycasting->hit = 0;
-        setBasRayPar2(raycasting, player, map, x);
+    raycasting->cameraX = 2 * x / (double)settings->sW - 1; //x-coordinate in camera space
+    raycasting->rayDirX = player->dirX + player->planeX * raycasting->cameraX;
+    raycasting->rayDirY = player->dirY + player->planeY * raycasting->cameraX;
+    
+	raycasting->mapX = (int)player->posX;
+	raycasting->mapY = (int)player->posY;
+	// raycasting->deltaDistX = fabs(1 / raycasting->rayDirX);
+	// raycasting->deltaDistY = fabs(1 / raycasting->rayDirY);
+	raycasting->deltaDistX = (raycasting->rayDirY == 0) ? 0 : ((raycasting->rayDirX == 0) ? 1 : fabs(1 / raycasting->rayDirX));
+	raycasting->deltaDistY = (raycasting->rayDirX == 0) ? 0 : ((raycasting->rayDirY == 0) ? 1 : fabs(1 / raycasting->rayDirY));
+	raycasting->hit = 0;
+	setBasRayPar2(raycasting, player, map, x, settings);
 }

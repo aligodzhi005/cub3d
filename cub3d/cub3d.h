@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:37:47 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/20 20:50:14 by rvena            ###   ########.fr       */
+/*   Updated: 2021/03/21 16:44:40 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 #define mapWidth 33
 #define mapHeight 14
-#define screenWidth 640
-#define screenHeight 480
+// #define screenWidth 640
+// #define screenHeight 480
 
 #include <math.h>
 #include "./minilibx_mms_20200219/mlx.h"
@@ -92,9 +92,22 @@ typedef struct r_data
     int		hit;
     double	perpWallDist;
     int		side;
-	double	Zbuffer[screenWidth];
+	double	*Zbuffer;
     double	wallX;//where exactly the wall was hit
 }				ray_data;
+
+typedef struct set_data
+{
+	int		sW;
+	int		sH;
+	char	*NO;
+	char	*SO;
+	char	*WE;
+	char	*EA;
+	char	*S;
+	int		floor;
+	int		ceilling;
+}				settings;
 
 typedef struct a_data
 {
@@ -110,16 +123,18 @@ typedef struct a_data
 	int				*spriteOrder;
 	double			*spriteDist;
 	sprite_data		*listOfSprites;
+	settings		*settings;
 	char			**map;
 }				all_data;
 
-//void    setBasRayPar3(ray_data *raycasting, player_data *player, int worldMap[24][24]);
-//void    setBasRayPar2(ray_data *raycasting, player_data *player, int worldMap[24][24]);
-void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map);
-//void    drawVertLine(ray_data *raycasting, t_data *img, int x);
+//void	setBasRayPar3(ray_data *raycasting, player_data *player, int worldMap[24][24]);
+//void	setBasRayPar2(ray_data *raycasting, player_data *player, int worldMap[24][24]);
+void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map, settings *settings);
+//void	drawVertLine(ray_data *raycasting, t_data *img, int x);
 void    my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void    drawFOV(all_data *everything, char **map);
-void	setAndSort(all_data *ever, sprite_data *listOfSprites);
+void	drawFOV(all_data *everything, char **map, settings *settings);
+void	setAndSort(all_data *ever, sprite_data *listOfSprites, settings *settings);
 int		get_next_line(int fd, char **line);
+int 	line_correction(const char *line);
 
 #endif

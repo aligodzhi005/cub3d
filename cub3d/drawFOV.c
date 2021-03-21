@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-static void drawVertLine(all_data *everything, int x)
+static void drawVertLine(all_data *everything, int x, settings *settings)
 {
     int lineHeight;
     int drawStart;
@@ -10,13 +10,13 @@ static void drawVertLine(all_data *everything, int x)
 
     temp = everything->texture;
     y = 0;
-    lineHeight = (int)(screenHeight / everything->raycasting->perpWallDist);
+    lineHeight = (int)(settings->sH / everything->raycasting->perpWallDist);
 
     //calculate lowest and highest pixel to fill in current stripe
-    drawStart = -1 * lineHeight / 2 + screenHeight / 2;
+    drawStart = -1 * lineHeight / 2 + settings->sH / 2;
     if(drawStart < 0)drawStart = 0;
-    drawEnd = lineHeight / 2 + screenHeight / 2;
-    if(drawEnd >= screenHeight)drawEnd = screenHeight - 1;
+    drawEnd = lineHeight / 2 + settings->sH / 2;
+    if(drawEnd >= settings->sH)drawEnd = settings->sH - 1;
 
     // double wallX; //where exactly the wall was hit
     // if(side == 0) wallX = posY + raycasting->perpWallDist * raycasting->rayDirX;
@@ -32,10 +32,10 @@ static void drawVertLine(all_data *everything, int x)
     // How much to increase the texture coordinate per screen pixel
     double step = 1.0 * temp->texHeight / lineHeight;
     // Starting texture coordinate
-    double texPos = (drawStart - screenHeight / 2 + lineHeight / 2) * step;
+    double texPos = (drawStart - settings->sH / 2 + lineHeight / 2) * step;
     
     char *color;
-    while (y < screenHeight)
+    while (y < settings->sH)
     {
         if (y >= drawStart && y <= drawEnd)
         {
@@ -61,15 +61,15 @@ static void drawVertLine(all_data *everything, int x)
     }
 }
 
-void drawFOV(all_data *everything, char **map)
+void drawFOV(all_data *everything, char **map, settings *settings)
 {
     int x;
 
 	x = 0;
-    while (x < screenWidth)
+    while (x < settings->sW)
     {
-        setBasRayPar(everything->raycasting, everything->player, x, map);
-        drawVertLine(everything, x);
+        setBasRayPar(everything->raycasting, everything->player, x, map, settings);
+        drawVertLine(everything, x, settings);
         x++;
     }
 }
