@@ -194,6 +194,54 @@ int check_resolution_number(char *widthOrLength)
 	return(0);
 }
 
+int checkResNumber(char **res, int number, int length)
+{
+	int i;
+	int j;
+
+	j = 0;
+	i = 0;
+	while(res[i][j])
+		j++;
+	if(j != length)
+	{
+		printf("Error\nBad argument\n");
+		return(1);
+	}
+	while(res[i])
+		i++;
+	if(i != number)
+	{
+		printf("Error\nBad argument number\n");
+		return(1);
+	}
+	return(0);
+}
+
+int setTex(const char *line, settings *settings, int l)
+{
+	char **res;
+
+	res = ft_split(line, ' ');
+	if(checkResNumber(res, 2, l) == 0)
+	{
+		if(res[0][0] == 'N' && res[0][1] == '0')
+			settings->NO = res[1];
+		if(res[0][0] == 'S' && res[0][1] == '0')
+			settings->SO = res[1];
+		if(res[0][0] == 'W' && res[0][1] == 'E')
+			settings->WE = res[1];
+		if(res[0][0] == 'E' && res[0][1] == 'A')
+			settings->NO = res[1];
+		if(res[0][0] == 'N' && res[0][1] == '0')
+			settings->NO = res[1];
+		if(res[0][0] == 'S' && res[0][1] == '\0')
+			setting->S = res[1];
+		return(0)
+	}
+	return(1);	
+}
+
 int set_resolution(const char *line, settings *settings)
 {
 	char **res;
@@ -234,14 +282,25 @@ int line_correction(const char *line)
 int	check_line(const char *line, settings *settings)
 {
 	size_t line_length;
+	int i;
 
+	i = 0;
 	line_length = line_correction(line);
-	if(ft_strnstr(line, "R", line_length))
+	while(line[i])
 	{
-		if (set_resolution(line, settings) == 1)
-			return(1);
-		else
-			return(2);
+		if(line[i] == 'R')
+		{
+			if (set_resolution(line, settings) == 1)
+				return(1);
+			else
+				return(2);
+		}
+		else if(line[i] == 'S' && line[i + 1] != 'O')
+			setTex(line, setting, 1);
+		else if(ft_strchr("NSWE", line[i]) != NULL)
+		{
+			setTex(line, setting, 2);
+		}
 	}
 	return(0);
 }
