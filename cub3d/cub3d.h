@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:37:47 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/21 16:44:40 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/08 17:17:15 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ typedef struct set_data
 	char	*S;
 	int		floor;
 	int		ceilling;
+	int		mapW;
+	int		mapH;
 }				settings;
 
 typedef struct a_data

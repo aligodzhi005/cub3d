@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:20:27 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/21 16:41:12 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/08 17:17:17 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i, settings 
 	int sprite;
 	int y;
 	char *color;
+	
 	sprite = drawStartX;
 	while (sprite < drawEndX)
 	{

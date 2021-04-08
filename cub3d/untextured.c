@@ -6,11 +6,32 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 11:16:20 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/21 17:15:44 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/08 17:17:13 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int checkWhtSpc(char chr)
+{
+	if(chr != ' ' && chr != '\t' 
+		&& chr != '\n' && chr != '\v'
+		&& chr != '\f' && chr != '\r')
+		return(0);
+	return (1);
+}
+
+int lineEmptyOrNot(char *line)
+{
+	int i = 0;
+	while (line[i] != '\0')
+	{
+		if(checkWhtSpc(line[i]) == 0)
+			return(0);
+		i++;
+	}
+	return(1);
+}
 
 void			put_square(t_data img, int col, int x, int y, int scale)
 {
@@ -116,7 +137,10 @@ int 	render_next_frame(all_data *everything)
 	setAndSort(everything, everything->listOfSprites, everything->settings);
 	// put_square(*everything->minimap, 1, (int)everything->player->posX, (int)everything->player->posY, 10);
 	// mlx_put_image_to_window(everything->minimap->mlx_ptr, everything->minimap->win_ptr, everything->minimap->ind, 0, 0);
+
 	mlx_put_image_to_window(everything->img->mlx_ptr, everything->img->win_ptr, everything->img->ind, 0, 0);
+	mlx_do_sync(everything->img->mlx_ptr);
+	// mlx_loop(everything->img->mlx_ptr);
 	return (0);
 }
 
@@ -184,14 +208,20 @@ int check_resolution_number(char *widthOrLength)
 	i = 0;
 	while (i < ft_strlen((const char *)widthOrLength))
 	{
-		if(ft_isdigit(widthOrLength[i]) == 0)
+		if(ft_isdigit(widthOrLength[i]) == 0 || i >= 5)
 		{
-			printf("Error: bad resolution\n");
+			printf("Error:\nBad resolution\n");
 			return(1);
 		}
 		i++;
 	}
 	return(0);
+}
+
+int printRepeatErr(void)
+{
+	printf("Error\nRepeatable type indentifier\n");
+	return(1);
 }
 
 int checkResNumber(char **res, int number, int length)
@@ -212,58 +242,138 @@ int checkResNumber(char **res, int number, int length)
 		i++;
 	if(i != number)
 	{
-		printf("Error\nBad argument number\n");
+		printf("Error\nBad number of arguments\n");
 		return(1);
 	}
 	return(0);
 }
+
+int setTexPath(const char *line, settings *settings, int d)
+{
+	char *tmp;
+
+	tmp = (char *)line;
+	while(checkWhtSpc(*tmp) == 1)
+		tmp++;
+	if(d == 1)
+		settings->NO = tmp;
+	else if(d == 2)
+		settings->SO = tmp;
+	else if(d == 3)
+		settings->WE = tmp;
+	else if(d == 4)
+		settings->EA = tmp;
+	else if(d == 5)
+		settings->S = tmp;
+	return(0);
+}
+
+// int checkTexPath2(const char *line, settings *settings)
+// {
+// 	if(res[0][0] == 'E' && res[0][1] == 'A')
+// 		if(settings->EA == NULL)
+// 		// {
+// 		// 	settings->EA = res[1];
+// 		// 	return(0);
+// 		// }
+// 		return(setTexPath())
+// 		else
+// 			return(printRepeatErr());
+// 	else if(res[0][0] == 'S' && res[0][1] == '\0')
+// 		{
+// 			if(settings->S == NULL)
+// 			{
+// 				settings->S = res[1];
+// 				return(0);
+// 			}
+// 			else
+// 			{
+// 				return(printRepeatErr());
+// 			}
+// 		}
+// 	printf("Error\nBad argument\n");
+// 	return(1);
+// }
+
+// int checkTexPath(const char *line, settings *settings)
+// {
+// 	if(res[0][0] == 'N' && res[0][1] == 'O')
+// 		if(settings->NO == NULL)
+// 		{
+// 			settings->NO = res[1];
+// 			return(0);
+// 		}
+// 		else
+// 			return(printRepeatErr());
+// 	else if(res[0][0] == 'S' && res[0][1] == 'O')
+// 		if(settings->SO == NULL)
+// 		{
+// 			settings->SO = res[1];
+// 			return(0);
+// 		}
+// 		else
+// 			return(printRepeatErr());
+// 	else if(res[0][0] == 'W' && res[0][1] == 'E')
+// 		{
+// 			if(settings->WE == NULL)
+// 			{
+// 				settings->WE = res[1];
+// 				return(0);
+// 			}
+// 			else
+// 			{
+// 				return(printRepeatErr());
+// 			}
+// 		}
+// 	return(checkTexPath2(res, settings));
+// }
 
 int setTex(const char *line, settings *settings, int l)
 {
-	char **res;
+	int i;
 
-	res = ft_split(line, ' ');
-	if(checkResNumber(res, 2, l) == 0)
-	{
-		if(res[0][0] == 'N' && res[0][1] == '0')
-			settings->NO = res[1];
-		if(res[0][0] == 'S' && res[0][1] == '0')
-			settings->SO = res[1];
-		if(res[0][0] == 'W' && res[0][1] == 'E')
-			settings->WE = res[1];
-		if(res[0][0] == 'E' && res[0][1] == 'A')
-			settings->NO = res[1];
-		if(res[0][0] == 'N' && res[0][1] == '0')
-			settings->NO = res[1];
-		if(res[0][0] == 'S' && res[0][1] == '\0')
-			setting->S = res[1];
-		return(0)
-	}
+	i = 0;
+	// res = ft_split(line, ' ');
+	// if(checkResNumber(res, 2, l) == 0)
+	// {
+		if(line[i] == 'N' && line[i + 1] == 'O')
+			if(settings->NO == NULL)
+				return(setTexPath(&line[i + 2], settings, 1));
+			else
+				return(printRepeatErr());
+		else if(line[i] == 'S' && line[i + 1] == 'O')
+			if(settings->SO == NULL)
+				return(setTexPath(&line[i + 2], settings, 2));
+			else
+				return(printRepeatErr());
+		else if(line[i] == 'W' && line[i + 1] == 'E')
+			if(settings->WE == NULL)
+				return(setTexPath(&line[i + 2], settings, 3));
+			else
+				return(printRepeatErr());
+		else if(line[i] == 'E' && line[i + 1] == 'A')
+			if(settings->EA == NULL)
+				return(setTexPath(&line[i + 2], settings, 4));
+			else
+				return(printRepeatErr());
+		else if(line[i] == 'S' && checkWhtSpc(line[i + 1]) == 1)
+			{
+			if(settings->S == NULL)
+				return(setTexPath(&line[i + 2], settings, 5));
+			else
+				return(printRepeatErr());
+			}
+		// printf("Error\nBad type argument\n");
+		// return(1);
+		// return(checkTexPath(line, settings));
+	//} 
 	return(1);	
-}
-
-int set_resolution(const char *line, settings *settings)
-{
-	char **res;
-
-	res = ft_split(line, ' ');
-	if(res[0][1] != '\0' || res[0][0] != 'R')
-	{
-		printf("Error\nbad type indentifier\n");
-		return(1);
-	}
-	if(check_resolution_number(res[1]) == 1)
-		return(1);
-	if(check_resolution_number(res[2]) == 1)
-		return(1);
-	settings->sW = ft_atoi(res[1]);
-	settings->sH = ft_atoi(res[2]);
-	return(0);
 }
 
 int line_correction(const char *line)
 {
 	size_t i;
+	int isSpace;
 	char *tmp;
 
 	i = 0;
@@ -272,11 +382,110 @@ int line_correction(const char *line)
 		return(0);
 	while(tmp[i] != '\0')
 	{
-		if(ft_isprint(tmp[i]) == 0 || tmp[i] == '"')
+		// if(ft_isprint(tmp[i]) == 0 || tmp[i] == '"')
+		if(checkWhtSpc(tmp[i]) == 1)
 			tmp[i] = ' ';
 		i++;
 	}
 	return(i);
+}
+
+int set_resolution(const char *line, settings *settings)
+{
+	char **res;
+
+	
+	line_correction(line);
+	if(settings->sW != 0 && settings->sH != 0)
+		return(printRepeatErr());
+	res = ft_split(line, ' ');
+	if(res[0][1] != '\0' || res[0][0] != 'R')
+	{
+		printf("Error\nBad argument\n");
+		return(1);
+	}
+	if(check_resolution_number(res[1]) == 1 || 
+		checkResNumber(res, 3, 1) == 1)
+		return(1);
+	if(check_resolution_number(res[2]) == 1)
+		return(1);
+	settings->sW = ft_atoi(&res[1]);
+	settings->sH = ft_atoi(&res[2]);
+	return(0);
+}
+
+int checkSettings(settings *settings, const char *line)
+{
+	int i;
+
+	i = 0;
+	if(settings->sW != 0 && settings->sH != 0
+		&& settings->floor != -1 && settings->ceilling != -1)	
+		if(settings->NO != NULL && settings->SO != NULL	&& 
+			settings->WE != NULL && settings->EA != NULL
+			&& settings->S != NULL)
+			{
+				// if(line[i] == '\0')
+				// 	return(1);
+				while(line[i] != '\0')
+				{
+					if(ft_isprint(line[i++]))
+						return (1);
+					// i++;
+				}
+			}
+	if(lineEmptyOrNot((char *)line) == 1)
+		return(1);
+	return(0);
+}
+
+int printBadArg(void)
+{
+	printf("Error\nBad Argument\n");
+	return(1);
+}
+
+int setColor(const char *line, int *color)
+{
+	char	*tmp;
+	int		num;
+	int		i;
+
+	num = 1;
+	tmp = (char *)line;
+	while(*tmp)
+	{
+		i = ft_atoi(&tmp);
+		*color += i * num + 1;
+		tmp++;
+		num *= 256;
+		if(*color < 0 || num > 16777216 || i > 255)
+		{
+			printf("Error\nBad color\n");
+			return(1);
+		}
+		while(checkWhtSpc(*tmp) == 1 || *tmp == ',')
+			tmp++;
+	}
+	return(0);
+}
+
+int setColFC(const char *line, settings *settings)
+{
+	int i;
+
+	i = 0;
+	if (line[i] == 'F' && checkWhtSpc(line[i + 1]) == 1)
+		return(setColor(&line[i + 1], &settings->floor));
+	else if (line[i] == 'C' && checkWhtSpc(line[i + 1]) == 1)
+		return(setColor(&line[i + 1], &settings->ceilling));
+	else 
+		return(printBadArg());
+	// if(checkWhtSpc(line[i++]) == 0)
+	// 	return(printBadMap());
+	// while(checkWhtSpc(line[i]))
+	// 	i++; 
+	// if(ft_isdigit(line[i]) == 1)
 }
 
 int	check_line(const char *line, settings *settings)
@@ -285,42 +494,85 @@ int	check_line(const char *line, settings *settings)
 	int i;
 
 	i = 0;
-	line_length = line_correction(line);
+	line_length = checkSettings(settings, line);
+	if(line_length == 1)
+		return(0);
+	// else if(line_length == 2)
+	// 	return(2);
+	// line_length = line_correction(line);
+	// if(line_length > settings->mapW)
+	// 	settings->mapW = line_length;
 	while(line[i])
 	{
+		if(ft_strchr("RNSWEFC", line[i]) == NULL)
+			if(checkWhtSpc(*line) == 0)
+			{
+				printf("Error\nBad argument\n");
+				return(1);	
+			}
 		if(line[i] == 'R')
+		// if(ft_strnstr(line, "R", line_length))
 		{
 			if (set_resolution(line, settings) == 1)
 				return(1);
 			else
 				return(2);
 		}
-		else if(line[i] == 'S' && line[i + 1] != 'O')
-			setTex(line, setting, 1);
-		else if(ft_strchr("NSWE", line[i]) != NULL)
+		else if(ft_strchr("FC", line[i]) != NULL)
+		// else if(ft_strnstr(line, "S ", line_length))
 		{
-			setTex(line, setting, 2);
+			if(setColFC(&line[i], settings) != 0)
+				return(1);
+			else
+				return(2);
 		}
+		else if(ft_strchr("NSWE", line[i]) != NULL)
+		// else if(ft_strchr("NSWE", line[i]) != NULL && ft_strchr("OAE", line[i + 1]) != NULL)
+		{
+			if(setTex(&line[i], settings, 2) == 0)
+				return(2);
+			else
+				return(1);
+		}
+		i++;
 	}
-	return(0);
+	printf("Error\nBad argument\n");
+	return(1);
 }
 
-char **makeMap(t_list *head, int size)
+char **makeMap(t_list *head, int size, settings *settings)
 {
-    char **map = (char **)malloc(sizeof(char*) * (size + 1));
+	char *vis;
 	int i;
 	t_list *tmp;
+	char **map;
 
 	tmp = head;
+	vis = tmp->content;
+	i = 0;
+	while(lineEmptyOrNot(vis))
+	{
+		i++;
+		tmp = tmp->next;
+		vis = tmp->content;
+	}
+	settings->mapH = size - i;
+	map = (char **)malloc(sizeof(char*) * (size - i));
 	i = -1;
 	while(tmp)
 	{
-		map[++i] = tmp->content;
+		vis = tmp->content;
+		if(lineEmptyOrNot(vis) == 0)
+			map[++i] = vis;
+		else
+		{
+			printf("Error\nBad map");
+			free(map);
+			return(NULL);
+		}
 		tmp = tmp->next;
 	}
 	i = -1;
-	// while(map[++i])
-	// 	ft_putendl_fd(map[i], 1);
 	return(map);
 }
 
@@ -356,12 +608,113 @@ void setDirPlane(char way, player_data *player)
 	}
 }
 
+int printBadMap(void)
+{
+	printf("Error\nBad map\n");
+	return(1);
+}
+
+int mapNormalize(char **map, settings *settings)
+{
+	char *tmp;
+	// char *spc;
+	size_t line_length;
+	int i;
+
+	// line_length = 0;
+	while(i < settings->mapH)
+	{
+		line_length = ft_strlen(map[i]);
+		if(line_length < settings->mapW)
+		{
+			tmp = map[i];
+			map[i] = (char *)malloc((settings->mapW + 1) * sizeof(char));
+			map[i][settings->mapW + 1] = '\0';
+			map[i] = ft_memcpy(map[i], tmp, line_length);
+			while(line_length < settings->mapW + 1)
+			// {
+				map[i][line_length++] = ' ';
+				// line_length++;
+			// }
+			free(tmp);
+		}
+		i++;
+	}
+	return(0);
+}
+
+int checkMap(char **map, settings *settings)
+{
+	int i;
+	int j; 
+	int start;
+
+	start = 0;
+	i = 0;
+	// моя задумка в том, чтобы проверять есть ли символ в списке разрешенных - это во-первых
+	// должен подниматься флаг startHor, если наткнулись на 1 - это во-вторых
+	// если символ является 0,N,S,W,E,2, то должен быть поднят флаг startHor и после него не должно быть ' ' или '\0' - это в-третьих
+	// такая же проверка для вертикальной линии
+	// check horizontal line
+
+
+	while(i < settings->mapH)
+	{
+		j = 0;
+		while(map[i][j] != '\0')
+		{
+			if(ft_strchr("012NSWE ", map[i][j]) == NULL)
+				return(printBadMap());
+			else if(map[i][j] == '1')
+				start = 1;
+			else if(ft_strchr("02NSWE", map[i][j]) != NULL)
+				if(start != 1 || map[i][j + 1] == ' ' || map[i][j + 1] == '\0' || map[i][j - 1] == ' ')
+					return(printBadMap());
+			j++;
+		}
+		if(j > settings->mapW)
+			settings->mapW = j;
+		i++;
+	}
+	printf("%d\n", settings->mapW);
+	mapNormalize(map, settings);
+	j = 0;
+	while(j < settings->mapW)
+	{
+		i = 0;
+		while(i < settings->mapH)
+		{
+			if(map[i][j] == '1')
+				start = 1;
+			else if(ft_strchr("02NSWE", map[i][j]) != NULL)
+				if(start != 1 || map[i + 1][j] == ' ' || map[i + 1][j] == '\0' || map[i - 1][j] == ' ')
+					return(printBadMap());
+			i++;
+		}
+		j++;
+	}
+	return(0);
+}
+
 int main(int argc, char **argv)
 {
 	int fd;
+	int res_check_line;
 	char **map;
 	settings	settings;
+	settings.sW = 0;
+	settings.sH = 0;
+	settings.NO = NULL;
+	settings.SO = NULL;
+	settings.WE = NULL;
+	settings.EA = NULL;
+	settings.S = NULL;
+	settings.floor = -1;
+	settings.ceilling = -1;
+	settings.mapH = 0;
+	settings.mapW = 0;
 
+	res_check_line = 0;
     t_data img;
     t_data minimap;
     t_data minimapPlayer;
@@ -409,16 +762,27 @@ int main(int argc, char **argv)
 	t_list *head = NULL;
 	while (get_next_line(fd, &line))
 	{
-		if(check_line((const char *)line, everything.settings) == 0)
+		res_check_line = check_line((const char *)line, everything.settings);
+		if(res_check_line == 0)
 			ft_lstadd_back(&head, ft_lstnew(line));
-		else if(check_line((const char *)line, everything.settings) == 1)
+		else if(res_check_line == 1)
 			return(0);
 	}
 	ft_lstadd_back(&head, ft_lstnew(line));
-	everything.map = makeMap(head, ft_lstsize(head));
+	printf("S = %s\nNO = %s\n", everything.settings->S, everything.settings->NO);
+	// printf("%s\n", everything.map[0]);
+	everything.map = makeMap(head, ft_lstsize(head), &settings);
+	if(everything.map == NULL)
+		return(0);
+		printf("%s\n", everything.map[0]);
 	printf("sW = %d\nsH = %d\n", everything.settings->sW, everything.settings->sH);
+	printf("mapH = %d\n", everything.settings->mapH);
+	if (checkMap(everything.map, everything.settings))
+		return(0);
 	raycasting.Zbuffer = (double *)malloc(sizeof(double) * everything.settings->sW);
+	printf("%s\n", img.mlx_ptr);
 	img.mlx_ptr = mlx_init();
+	printf("%s\n", img.mlx_ptr);
     img.win_ptr = mlx_new_window(img.mlx_ptr, everything.settings->sW, everything.settings->sH, "Raycasting");
     
     // minimap.mlx_ptr = mlx_init();
@@ -433,14 +797,14 @@ int main(int argc, char **argv)
 									&img.endian);
 
     texture1.relative_path = "gomer.png";
-    texture1.ind = mlx_png_file_to_image(img.mlx_ptr, "gomer.png", &texture1.texWidth, &texture1.texHeight);
+    texture1.ind = mlx_png_file_to_image(img.mlx_ptr, everything.settings->NO, &texture1.texWidth, &texture1.texHeight);
     texture1.addr = mlx_get_data_addr(texture1.ind, &texture1.bits_per_pixel, 
                                     &texture1.line_length, &texture1.endian);
 	
 	sprite1.relative_path = "barrel.png";
 	sprite1.texHeight = 0;
 	sprite1.texWidth = 0;
-	sprite1.ind = mlx_png_file_to_image(img.mlx_ptr, "barrel.png", &sprite1.texWidth, &sprite1.texHeight);
+	sprite1.ind = mlx_png_file_to_image(img.mlx_ptr, everything.settings->S, &sprite1.texWidth, &sprite1.texHeight);
 	sprite1.addr = mlx_get_data_addr(sprite1.ind, &sprite1.bits_per_pixel, 
 									&sprite1.line_length, &sprite1.endian);
 
@@ -458,16 +822,18 @@ int main(int argc, char **argv)
 	sprX = 0;
 	sprY = 0;
 
-    for (int i = 0; i < 14; i++)
+    for (int i = 0; i < everything.settings->mapH; i++)
     {
-        for (int j = 0; j < 33; j++)
+        for (int j = 0; j < everything.settings->mapW; j++)
         {
+			// printf("%c", (everything.map)[i][j]);
             if(ft_strchr("NSWE", everything.map[i][j]))
             {
                 player.posX = j + 0.5;
                 player.posY = i + 0.5;
 				setDirPlane(everything.map[i][j], everything.player);
 				everything.map[i][j] = '0';
+				printf("%c", everything.map[i][j]);
 				// put_square(minimap, 1, (int)player.posX, (int)player.posY, 10);
                 // mlx_put_image_to_window(minimap.mlx_ptr, minimap.win_ptr, minimapPlayer.ind, j * 10, i * 10);
             }
@@ -485,12 +851,16 @@ int main(int argc, char **argv)
 				everything.listOfSprites[everything.numOfSprite - 1].x = j + 0.5;
 				everything.listOfSprites[everything.numOfSprite - 1].y = i + 0.5;
 				free(tmp);
+				printf("%c", everything.map[i][j]);
 				//k++;
 			}
+			if(everything.map[i][j] == ' ')
+				printf("A");
             // if(everything.map[i][j] == '1' || everything.map[i][j] == '2')
 				// put_square(minimap, 0, j, i, 10);
                 // mlx_put_image_to_window(minimap.mlx_ptr, minimap.win_ptr, minimap.ind, j * 10, i * 10);
         }
+		printf("\n");
     }
 	everything.spriteOrder = (int *)malloc(sizeof(int) * everything.numOfSprite);
 	everything.spriteDist = (double *)malloc(sizeof(double) * everything.numOfSprite);
@@ -500,5 +870,6 @@ int main(int argc, char **argv)
 	mlx_hook(img.win_ptr, 3, 1L<<0, key_hook_release, everything.player);
     mlx_loop_hook(img.mlx_ptr, render_next_frame, &everything);
     mlx_loop(img.mlx_ptr);
+	
     // mlx_loop(minimap.mlx_ptr);
 }

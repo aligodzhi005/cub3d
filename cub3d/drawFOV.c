@@ -54,9 +54,9 @@ static void drawVertLine(all_data *everything, int x, settings *settings)
             my_mlx_pixel_put(everything->img, x, y, *(int *)color);
         }
         else if (y < drawStart)
-            my_mlx_pixel_put(everything->img, x, y, 0x0066CC);
+            my_mlx_pixel_put(everything->img, x, y, everything->settings->ceilling);
         else if (y > drawEnd)
-            my_mlx_pixel_put(everything->img, x, y, 0xCCFFF66);
+            my_mlx_pixel_put(everything->img, x, y, everything->settings->floor);
         y++;
     }
 }
