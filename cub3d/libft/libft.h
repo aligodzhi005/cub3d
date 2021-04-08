@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:52:05 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/08 14:58:29 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/08 19:12:22 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char			*ft_strrchr(const char *s, int c);
 int				ft_strncmp(const char *str1, const char *str2, size_t num);
 char			*ft_strnstr(const char *big, const char *liеl, size_t len);
 int				ft_strncmp(const char *str1, const char *str2, size_t num);
-int				ft_atoi(char **str);
+int				ft_atoi(char *str);
 int				ft_isalpha(int ch);
 int				ft_isdigit(int ch);
 int				ft_isalnum(int ch);

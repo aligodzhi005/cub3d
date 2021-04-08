@@ -3,10 +3,10 @@ NO	/Users/rvena/Desktop/cub3d/bluestone.png
 SO	/Users/rvena/Desktop/cub3d/bluestone.png
 WE	b.png
 EA	/Users/rvena/Desktop/cub3d/bluestone.png
-											
-R 			1920 1020
-F  255   , 255, 255
-C  255   , 255, 255
+
+	R 			1920 1020
+	F  255   , 255, 255
+	C  255   , 0, 0
 
 
 

@@ -15,10 +15,9 @@ all:		$(NAME)
 	$(CC) $(CFLAGS) -c ./libft/ ./minilibx_mms_20200219/ $< -o $(<:.c=.o)
 $(NAME):	$(OBJS)
 		@make bonus -C libft
-		@mv libft/libft.a .
 		@make -C minilibx_mms_20200219
 		@mv minilibx_mms_20200219/libmlx.dylib .
-		$(CC) $(CFLAGS) $(MACFLAGS) -o $(NAME) libmlx.dylib libft.a $(OBJS)  
+		$(CC) $(CFLAGS) $(MACFLAGS) -o $(NAME) libmlx.dylib ./libft/libft.a $(OBJS)  
 				
 clean:		
 		$(RM) $(OBJS)

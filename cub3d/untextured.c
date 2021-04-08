@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 11:16:20 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/08 17:17:13 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/08 20:22:08 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,10 +390,23 @@ int line_correction(const char *line)
 	return(i);
 }
 
+char	**ft_free_res(char **res)
+{
+	int k;
+
+	k = 0;
+	while (res[k] != NULL)
+	{
+		free(res[k]);
+		k++;
+	}
+	free(res);
+	return (NULL);
+}
+
 int set_resolution(const char *line, settings *settings)
 {
 	char **res;
-
 	
 	line_correction(line);
 	if(settings->sW != 0 && settings->sH != 0)
@@ -409,8 +422,10 @@ int set_resolution(const char *line, settings *settings)
 		return(1);
 	if(check_resolution_number(res[2]) == 1)
 		return(1);
-	settings->sW = ft_atoi(&res[1]);
-	settings->sH = ft_atoi(&res[2]);
+	settings->sW = ft_atoi(res[1]);
+	settings->sH = ft_atoi(res[2]);
+	ft_free_res(res);
+	// free(line);
 	return(0);
 }
 
@@ -445,21 +460,40 @@ int printBadArg(void)
 	return(1);
 }
 
-int setColor(const char *line, int *color)
+int countNumberOfDigit(int i)
+{
+	int count;
+
+	count = 0;
+	if (i == 0)
+		return (1);
+	while(i != 0)
+	{
+		i /= 10;
+		count++;
+	}
+	return(count);
+}
+
+int setColor(const char *line, long *color)
 {
 	char	*tmp;
 	int		num;
 	int		i;
 
-	num = 1;
+	num = 16777216;
 	tmp = (char *)line;
 	while(*tmp)
 	{
-		i = ft_atoi(&tmp);
-		*color += i * num + 1;
-		tmp++;
-		num *= 256;
-		if(*color < 0 || num > 16777216 || i > 255)
+		while(checkWhtSpc(*tmp) == 1)
+			tmp++;
+		num /= 256;
+		i = ft_atoi(tmp);
+		if(*color == -1)
+			*color += 1;
+		*color += i * num;
+		tmp += countNumberOfDigit(i);
+		if(*color < 0 || num < 1 || i > 255)
 		{
 			printf("Error\nBad color\n");
 			return(1);
@@ -467,6 +501,7 @@ int setColor(const char *line, int *color)
 		while(checkWhtSpc(*tmp) == 1 || *tmp == ',')
 			tmp++;
 	}
+	// free(line);
 	return(0);
 }
 
@@ -780,7 +815,7 @@ int main(int argc, char **argv)
 	if (checkMap(everything.map, everything.settings))
 		return(0);
 	raycasting.Zbuffer = (double *)malloc(sizeof(double) * everything.settings->sW);
-	printf("%s\n", img.mlx_ptr);
+	// printf("%s\n", img.mlx_ptr);
 	img.mlx_ptr = mlx_init();
 	printf("%s\n", img.mlx_ptr);
     img.win_ptr = mlx_new_window(img.mlx_ptr, everything.settings->sW, everything.settings->sH, "Raycasting");
@@ -801,7 +836,7 @@ int main(int argc, char **argv)
     texture1.addr = mlx_get_data_addr(texture1.ind, &texture1.bits_per_pixel, 
                                     &texture1.line_length, &texture1.endian);
 	
-	sprite1.relative_path = "barrel.png";
+	// sprite1.relative_path = "barrel.png";
 	sprite1.texHeight = 0;
 	sprite1.texWidth = 0;
 	sprite1.ind = mlx_png_file_to_image(img.mlx_ptr, everything.settings->S, &sprite1.texWidth, &sprite1.texHeight);
