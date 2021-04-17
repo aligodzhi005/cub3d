@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:20:27 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/08 17:17:17 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/17 16:45:14 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	setWidthHeight(all_data *ever, sprite_data *listOfSprites, int i, settings 
 
 	pl = ever->player;
 	spr = ever->sprite1;
-	
+
+	// printf("listOfSprites[ever->spriteOrder[i]].x = %f\n", listOfSprites[ever->spriteOrder[i]].x);//в этом месте сегается
+	// printf("pl->posX = %f\n", pl->posX);
 	spriteX = listOfSprites[ever->spriteOrder[i]].x - pl->posX;
 	spriteY = listOfSprites[ever->spriteOrder[i]].y - pl->posY;
 

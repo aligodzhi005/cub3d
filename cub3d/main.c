@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvena <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 20:33:00 by rvena             #+#    #+#             */
-/*   Updated: 2021/02/20 20:33:02 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/10 16:32:23 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,5 @@ int main(void)
 	mlx_put_image_to_window(img.mlx_ptr, img.win_ptr, img.ind, img.x, img.y);
 	mlx_put_image_to_window(img_gomer.mlx_ptr, img_gomer.win_ptr, img_gomer.ind, 500, 500);
 	mlx_loop_hook(img.mlx_ptr, render_next_frame, &img);
-	mlx_loop(img.mlx_ptr);
+	// mlx_loop(img.mlx_ptr);
 }

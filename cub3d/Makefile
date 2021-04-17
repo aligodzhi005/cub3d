@@ -1,9 +1,22 @@
-NAME = cub3d
+NAME = cub3D
 SRCS = setBasRayPar.c \
 	   untextured.c \
 	   get_next_line.c \
 	   drawSprite.c \
 	   drawFOV.c \
+	   srcs/generalFunctions.c \
+	   srcs/mlxFunctions.c \
+	   srcs/checkers/check_line.c \
+	   srcs/checkers/check_map.c \
+	   srcs/checkers/check_res_number.c \
+	   srcs/checkers/check_resolution_number.c \
+	   srcs/set_functions/set_resolution.c \
+	   srcs/set_functions/set_textures.c \
+	   srcs/set_functions/set_colours.c \
+	   srcs/set_functions/set_dir_plane.c \
+	   srcs/set_functions/make_map.c \
+	   srcs/print_errors/print_errors.c \
+	   srcs/init_structs.c \
 
 OBJS = $(SRCS:.c=.o)
 CC = clang
@@ -23,8 +36,9 @@ clean:
 		$(RM) $(OBJS)
 		@make clean -C libft
 		@make clean -C minilibx_mms_20200219
+		$(RM)  libmlx.dylib
 fclean:		clean
-		$(RM) $(NAME) cub3d.bmp
+		$(RM) $(NAME) screenshot.bmp
 		@make fclean -C libft
 re:		fclean all
 .PHONY:		all clean fclean re

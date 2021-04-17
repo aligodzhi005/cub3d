@@ -15,7 +15,7 @@ int main(void)
             //mlx_png_file_to_image(void *mlx_ptr, char *file, int *width, int *height);
     img = mlx_png_file_to_image(mlx, relative_path, &img_width, &img_height);
     mlx_put_image_to_window(mlx, win, img, 500, 500);
-    img_height = 200;
+    printf("height = %d\nwidth = %d\n", img_height, img_width);
     mlx_put_image_to_window(mlx, win, img, 100, 100);
     mlx_loop(mlx);
 }
