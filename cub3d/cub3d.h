@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:37:47 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/18 14:55:15 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 20:53:33 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,14 @@ typedef struct te_data
 	int			drawEnd;
 	double		spriteX;
 	double		spriteY;
-	int			spriteScreenX;
-	int			spriteHeight;
+	int			sprScrX;
+	int			sprH;
 	int			drawStartY;
 	int			drawEndY;
 	int			sprW;
 	int			drawStartX;
 	int			drawEndX;
+	int			texX;
 }               tex_data;
 
 typedef struct r_data
@@ -151,7 +152,7 @@ typedef struct a_data
 
 //void	setBasRayPar3(ray_data *raycasting, player_data *player, int worldMap[24][24]);
 //void	setBasRayPar2(ray_data *raycasting, player_data *player, int worldMap[24][24]);
-void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map, settings *settings);
+void	setBasRayPar(ray_data *ray, all_data *ever, int x, char **map);
 //void	drawVertLine(ray_data *raycasting, t_data *img, int x);
 void    my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	drawFOV(all_data *everything, char **map, settings *settings);
@@ -174,6 +175,8 @@ int		chooseFlOrCl(const char *line, settings *settings);
 int			printBadArg(void);
 int			printBadMap(void);
 int			printRepeatErr(void);
+void		printfMallocMap(void);
+void		printfMallocTexPath(void);
 void		setDirPlane(char way, player_data *player);
 settings	*init_settings(void);
 player_data	*init_player(void);
@@ -184,4 +187,12 @@ int			finish_game(all_data *everything);
 t_data		*initImgStr(settings	*settings);
 tex_data	*initSpr(all_data	*everything);
 void	setAndDraw(all_data *ever, sprite_data *listOfSprites, int i, settings *settings);
+void	drawFloorCeil(tex_data *temp, all_data *everything, int x, int y);
+int	setTexX(all_data *everything, tex_data *temp);
+double	setParForSpr(all_data *ever, sprite_data *listOfSprites, int i, tex_data *spr);
+void	drawSprite(all_data *ever, tex_data	*spr, settings *set, double trFY);
+void	rotation(player_data *player, char **map,
+				t_data *minimap, int i);
+// void	setAndDraw(all_data *ever, sprite_data *listOfSpr, int i, settings *set);
+
 #endif

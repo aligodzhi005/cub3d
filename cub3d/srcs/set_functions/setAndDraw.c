@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_resolution_number.c                          :+:      :+:    :+:   */
+/*   setAndDraw.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/09 14:53:00 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/18 20:45:28 by rvena            ###   ########.fr       */
+/*   Created: 2021/04/18 19:34:13 by rvena             #+#    #+#             */
+/*   Updated: 2021/04/18 19:39:21 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-int	check_resolution_number(char *widthOrLength)
+void	setAndDraw(all_data *ever, sprite_data *listOfSpr, int i, settings *set)
 {
-	int	i;
+	player_data	*pl;
+	tex_data	*spr;
+	double		transformY;
 
-	i = 0;
-	while (i < ft_strlen((const char *)widthOrLength))
-	{
-		if (ft_isdigit(widthOrLength[i]) == 0 || i >= 5)
-		{
-			printf("Error:\nBad resolution\n");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
+	spr = ever->sprite1;
+	transformY = setParForSpr(ever, listOfSpr, i, spr);
+	drawSprite(ever, spr, set, transformY);
 }

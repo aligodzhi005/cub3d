@@ -6,18 +6,17 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 13:54:15 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/18 12:44:49 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 15:48:20 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static	void findWall(ray_data *raycasting, char **map)
+static void	findWall(ray_data *raycasting, char **map)
 {
 	while (raycasting->hit == 0)
 	{
-		//jump to next map square, OR in x-direction, OR in y-direction
-		if(raycasting->sideDistX < raycasting->sideDistY)
+		if (raycasting->sideDistX < raycasting->sideDistY)
 		{
 			raycasting->sideDistX += raycasting->deltaDistX;
 			raycasting->mapX += raycasting->stepX;
@@ -29,89 +28,79 @@ static	void findWall(ray_data *raycasting, char **map)
 			raycasting->mapY += raycasting->stepY;
 			raycasting->side = 1;
 		}
-		if(map[raycasting->mapY][raycasting->mapX] == '1') 
+		if (map[raycasting->mapY][raycasting->mapX] == '1')
 			raycasting->hit = 1;
 	}
-	
 }
 
-void    setBasRayPar3(ray_data *raycasting, player_data *player, char **map, int x)
+static void	setBasRayPar3(ray_data *ray, player_data *player, char **map, int x)
 {
-	//where exactly the wall was hit
-	findWall(raycasting, map);
-	// while (raycasting->hit == 0)
-	// {
-	// 	//jump to next map square, OR in x-direction, OR in y-direction
-	// 	if(raycasting->sideDistX < raycasting->sideDistY)
-	// 	{
-	// 		raycasting->sideDistX += raycasting->deltaDistX;
-	// 		raycasting->mapX += raycasting->stepX;
-	// 		raycasting->side = 0;
-	// 	}
-	// 	else
-	// 	{
-	// 		raycasting->sideDistY += raycasting->deltaDistY;
-	// 		raycasting->mapY += raycasting->stepY;
-	// 		raycasting->side = 1;
-	// 	}
-	// 	if(map[raycasting->mapY][raycasting->mapX] == '1') 
-	// 		raycasting->hit = 1;
-    // }
-    //Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-    if(raycasting->side == 0) 
-        raycasting->perpWallDist = (raycasting->mapX - player->posX + (1 - raycasting->stepX) / 2) / raycasting->rayDirX;
-    else          
-        raycasting->perpWallDist = (raycasting->mapY - player->posY + (1 - raycasting->stepY) / 2) / raycasting->rayDirY;
-	raycasting->Zbuffer[x] = raycasting->perpWallDist;
-    //printf("raycasting->rayDirY = %f\n", raycasting->rayDirY);
-	//printf("raycasting->perpWallDist = %f\n", raycasting->perpWallDist);
-    if(raycasting->side == 0) 
-        raycasting->wallX = player->posY + raycasting->perpWallDist * raycasting->rayDirY;
-    else          
-        raycasting->wallX = player->posX + raycasting->perpWallDist * raycasting->rayDirX;
-    raycasting->wallX -= floor((raycasting->wallX));
-    //printf("mapX = %d\nmapY = %d\n", raycasting->mapX, raycasting->mapY);
+	findWall(ray, map);
+	if (ray->side == 0)
+		ray->perpWallDist = (ray->mapX - player->posX + (1 - ray->stepX) / 2)
+			/ ray->rayDirX;
+	else
+		ray->perpWallDist = (ray->mapY - player->posY + (1 - ray->stepY) / 2)
+			/ ray->rayDirY;
+	ray->Zbuffer[x] = ray->perpWallDist;
+	if (ray->side == 0)
+		ray->wallX = player->posY + ray->perpWallDist
+			* ray->rayDirY;
+	else
+		ray->wallX = player->posX + ray->perpWallDist
+			* ray->rayDirX;
+	ray->wallX -= floor((ray->wallX));
 }
 
-void    setBasRayPar2(ray_data *raycasting, player_data *player, char **map, int x, settings *settings)
+void	setBasRayPar2(ray_data *ray, player_data *player, char **map, int x)
 {
-    if(raycasting->rayDirX < 0)
-    {
-        raycasting->stepX = -1;
-        raycasting->sideDistX = (player->posX - raycasting->mapX) * raycasting->deltaDistX;
-    }
-    else
-    {
-        raycasting->stepX = 1;
-        raycasting->sideDistX = (raycasting->mapX + 1.0 - player->posX) * raycasting->deltaDistX;
-    }
-    if(raycasting->rayDirY < 0)
-    {
-        raycasting->stepY = -1;
-        raycasting->sideDistY = (player->posY - raycasting->mapY) * raycasting->deltaDistY;
-    }
-    else
-    {
-        raycasting->stepY = 1;
-        raycasting->sideDistY = (raycasting->mapY + 1.0 - player->posY) * raycasting->deltaDistY;
-    }
-    setBasRayPar3(raycasting, player, map, x);
+	if (ray->rayDirX < 0)
+	{
+		ray->stepX = -1;
+		ray->sideDistX = (player->posX - ray->mapX) * ray->deltaDistX;
+	}
+	else
+	{
+		ray->stepX = 1;
+		ray->sideDistX = (ray->mapX + 1.0 - player->posX) * ray->deltaDistX;
+	}
+	if (ray->rayDirY < 0)
+	{
+		ray->stepY = -1;
+		ray->sideDistY = (player->posY - ray->mapY) * ray->deltaDistY;
+	}
+	else
+	{
+		ray->stepY = 1;
+		ray->sideDistY = (ray->mapY + 1.0 - player->posY) * ray->deltaDistY;
+	}
+	setBasRayPar3(ray, player, map, x);
 }
 
-
-
-void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map, settings *settings)
+void	setBasRayPar(ray_data *ray, all_data *ever, int x, char **map)
 {
-	raycasting->cameraX = 2 * x / (double)settings->sW - 1; //x-coordinate in camera space
-	raycasting->rayDirX = player->dirX + player->planeX * raycasting->cameraX;
-	raycasting->rayDirY = player->dirY + player->planeY * raycasting->cameraX;
+	player_data	*player;
+	settings	*settings;
 
-	raycasting->mapX = (int)player->posX;
-	raycasting->mapY = (int)player->posY;
-	// raycasting->deltaDistX = fabs(1 / raycasting->rayDirX);
-	// raycasting->deltaDistY = fabs(1 / raycasting->rayDirY);
-	raycasting->deltaDistX = (raycasting->rayDirY == 0) ? 0 : ((raycasting->rayDirX == 0) ? 1 : fabs(1 / raycasting->rayDirX));
-	raycasting->deltaDistY = (raycasting->rayDirX == 0) ? 0 : ((raycasting->rayDirY == 0) ? 1 : fabs(1 / raycasting->rayDirY));
-	raycasting->hit = 0;
-	setBasRayPar2(raycasting, player, map, x, settings);
+	player = ever->player;
+	settings = ever->settings;
+	ray->cameraX = 2 * x / (double)settings->sW - 1;
+	ray->rayDirX = player->dirX + player->planeX * ray->cameraX;
+	ray->rayDirY = player->dirY + player->planeY * ray->cameraX;
+	ray->mapX = (int)player->posX;
+	ray->mapY = (int)player->posY;
+	if (ray->rayDirY == 0)
+		ray->deltaDistX = 0;
+	else if (ray->rayDirX == 0)
+		ray->deltaDistX = 1;
+	else
+		ray->deltaDistX = fabs(1 / ray->rayDirX);
+	if (ray->rayDirX == 0)
+		ray->deltaDistY = 0;
+	else if (ray->rayDirY == 0)
+		ray->deltaDistY = 1;
+	else
+		ray->deltaDistY = fabs(1 / ray->rayDirY);
+	ray->hit = 0;
+	setBasRayPar2(ray, player, map, x);
 }

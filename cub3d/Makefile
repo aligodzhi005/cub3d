@@ -3,14 +3,18 @@ SRCS = setBasRayPar.c \
 	   untextured.c \
 	   get_next_line.c \
 	   drawSprite.c \
+	   drawFOVUtils.c \
 	   drawFOV.c \
 	   srcs/generalFunctions.c \
 	   srcs/mlxFunctions.c \
+	   srcs/movement.c \
 	   srcs/checkers/check_line.c \
 	   srcs/checkers/check_map.c \
 	   srcs/checkers/check_res_number.c \
 	   srcs/checkers/check_resolution_number.c \
 	   srcs/set_functions/set_resolution.c \
+	   srcs/set_functions/setParForSpr.c \
+	   srcs/set_functions/setAndDraw.c \
 	   srcs/set_functions/set_textures.c \
 	   srcs/set_functions/set_colours.c \
 	   srcs/set_functions/set_dir_plane.c \

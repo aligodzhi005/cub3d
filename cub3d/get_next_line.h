@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 16:10:47 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/20 19:11:49 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 17:38:30 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ unsigned long	ft_strlen(const char *src);
 char			*ft_strjoin(char const *s1, char const *s2);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char			*ft_strdup(const char *s1);
-char			*check_remains(char *remains, char **line);
+char			*check_remains(char **remains, char **line);
 
 #endif
