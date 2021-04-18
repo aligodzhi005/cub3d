@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 14:12:52 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/17 17:45:16 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 15:02:03 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,8 @@ void drawFOV(all_data *everything, char **map, settings *settings)
     while (x < settings->sW)
     {
         setBasRayPar(everything->raycasting, everything->player, x, map, settings);
-        drawVertLine(everything, x, settings);
+        // printf("Не уйдёшь\n");
+		drawVertLine(everything, x, settings);
         x++;
     }
 }

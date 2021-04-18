@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 14:34:28 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/17 19:22:04 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 14:51:03 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,11 @@ int 	render_next_frame(all_data *everything)
 	// put_square(*everything->minimap, 2, (int)everything->player->posX, (int)everything->player->posY, 10);
 	// mlx_put_image_to_window(everything->minimap->mlx_ptr, everything->minimap->win_ptr, everything->minimap->ind, 0, 0);
 	movement(everything->player, everything->map, everything->minimap);
+	printf("Бляяяяяяяя\n");
     drawFOV(everything, everything->map, everything->settings);
+	printf("Ты где тварь\n");
 	setAndSort(everything, everything->listOfSprites, everything->settings);
+	printf("Я тебя чую\n");
 	// put_square(*everything->minimap, 1, (int)everything->player->posX, (int)everything->player->posY, 10);
 	// mlx_put_image_to_window(everything->minimap->mlx_ptr, everything->minimap->win_ptr, everything->minimap->ind, 0, 0);
 

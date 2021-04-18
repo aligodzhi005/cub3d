@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 17:37:47 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/17 21:28:09 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 14:55:15 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,15 @@ typedef struct te_data
 	int         endian;
 	int			drawStart;
 	int			drawEnd;
+	double		spriteX;
+	double		spriteY;
+	int			spriteScreenX;
+	int			spriteHeight;
+	int			drawStartY;
+	int			drawEndY;
+	int			sprW;
+	int			drawStartX;
+	int			drawEndX;
 }               tex_data;
 
 typedef struct r_data
@@ -174,4 +183,5 @@ void		init_path_mas(settings *settings);
 int			finish_game(all_data *everything);
 t_data		*initImgStr(settings	*settings);
 tex_data	*initSpr(all_data	*everything);
+void	setAndDraw(all_data *ever, sprite_data *listOfSprites, int i, settings *settings);
 #endif

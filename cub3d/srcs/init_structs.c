@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/09 15:32:24 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/17 21:26:58 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 14:42:44 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_data *initImgStr(settings	*settings)
 		exit(-1);
 	}
 	img->mlx_ptr = mlx_init();
-    img->win_ptr = mlx_new_window(img->mlx_ptr, settings->sW, settings->sH, "Raycasting");
+	img->win_ptr = mlx_new_window(img->mlx_ptr, settings->sW, settings->sH, "Raycasting");
 	img->ind = mlx_new_image(img->mlx_ptr, settings->sW, settings->sH);
 	img->addr = mlx_get_data_addr(img->ind, &img->bits_per_pixel, &img->line_length,
 									&img->endian);
@@ -146,7 +146,8 @@ tex_data	*initSpr(all_data	*everything)
 		printf("Error\nError malloc sprite\n");
 		exit(-1);
 	}
-	sprite1->ind = mlx_png_file_to_image(everything->img->mlx_ptr, everything->settings->S, &sprite1->texWidth, &sprite1->texHeight);
+	sprite1->ind = mlx_png_file_to_image(everything->img->mlx_ptr, 
+		everything->settings->S, &sprite1->texWidth, &sprite1->texHeight);
 	sprite1->addr = mlx_get_data_addr(sprite1->ind, &sprite1->bits_per_pixel, 
 									&sprite1->line_length, &sprite1->endian);
 	return(sprite1);

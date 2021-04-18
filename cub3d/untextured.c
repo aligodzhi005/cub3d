@@ -6,7 +6,7 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 11:16:20 by rvena             #+#    #+#             */
-/*   Updated: 2021/04/17 22:25:44 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 14:50:13 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,8 @@ static void setListOfSprite(all_data *everything, int i, int j)
 	free(tmp);
 }
 
-int findPlayerSprite(all_data *everything)
+int 
+findPlayerSprite(all_data *everything)
 {
 	int i;
 	int j;
@@ -249,7 +250,17 @@ int findPlayerSprite(all_data *everything)
 		exit(-1);
 	}
 	everything->spriteOrder = (int *)malloc(sizeof(int) * everything->numOfSprite);
+	if(everything->spriteOrder == NULL)
+	{
+		printf("Error\nMalloc spriteOrder failed\n");
+		exit(-1);
+	}
 	everything->spriteDist = (double *)malloc(sizeof(double) * everything->numOfSprite);
+	if(everything->spriteDist == NULL)
+	{
+		printf("Error\nMalloc spriteDist failed\n");
+		exit(-1);
+	}
 	return(0);
 }
 ////////////////////////////////////////////////////
@@ -257,7 +268,7 @@ int findPlayerSprite(all_data *everything)
 int main(int argc, char **argv)
 {
 	// sleep(15);
-	int fd;
+	int fd;//нельзя удалять эту строчку
 	// int res_check_line;
 	// char **map;
 	
@@ -267,33 +278,39 @@ int main(int argc, char **argv)
 	all_data	everything;
 
 	// sprite_data *tmp;
-	everything.listOfSprites = NULL;
-	everything.raycasting = &raycasting;
-	everything.numOfSprite = 0;
-	everything.settings = init_settings();
-	everything.screenshot = 0;
-	everything.player = init_player();
+	everything.listOfSprites = NULL;//надо будет объединить в одну функцию под названием initEverything1;
+	everything.raycasting = &raycasting;//надо будет объединить в одну функцию под названием initEverything1;
+	everything.numOfSprite = 0;//надо будет объединить в одну функцию под названием initEverything1;
+	everything.settings = init_settings();//надо будет объединить в одну функцию под названием initEverything1;
+	everything.screenshot = 0;//надо будет объединить в одну функцию под названием initEverything1;
+	everything.player = init_player();//надо будет объединить в одну функцию под названием initEverything1;
 	// printf("Blyat\n");
 	if(check_read_argv(argc, argv, &fd, &everything.screenshot))
 		exit(1);
 	// printf("screen = %d\n", everything.screenshot);
 	if(read_file(&everything, &fd) == 1)
 		exit(1);
-	// printf("Жопа\n");
+	printf("Жопа\n");
 	if (checkMap(everything.map, everything.settings))
 		exit(0);
 	if(findPlayerSprite(&everything))
 		exit(1);
+	printf("Пиздец\n");
+	//это будет отдельной функцией, название 
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	raycasting.Zbuffer = (double *)malloc(sizeof(double) * everything.settings->sW);
 	everything.img = initImgStr(everything.settings);
 	// img.mlx_ptr = mlx_init();
     // img.win_ptr = mlx_new_window(img.mlx_ptr, everything.settings->sW, everything.settings->sH, "Raycasting");
 	mlx_get_screen_size(everything.img->mlx_ptr, &everything.settings->pcscrW, &everything.settings->pcscrH);
+	printf("Заебало\n");
 	if(everything.settings->sW > everything.settings->pcscrW)
 		everything.settings->sW = everything.settings->pcscrW;
 	if(everything.settings->sH > everything.settings->pcscrH)
 		everything.settings->sH = everything.settings->pcscrH;
+	printf("Бесит\n");
 	init_text(&everything);
+	printf("АААААААА\n");
 	// img.ind = mlx_new_image(img.mlx_ptr, everything.settings->sW, everything.settings->sH);
 	// img.addr = mlx_get_data_addr(img.ind, &img.bits_per_pixel, &img.line_length,
 	// 								&img.endian);
@@ -308,6 +325,11 @@ int main(int argc, char **argv)
 	// sprite1.texHeight = 0;
 	// sprite1.texWidth = 0;
 	everything.sprite1 = initSpr(&everything);
+	printf("Сукааааааааа\n");
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+	
 	// sprite1.ind = mlx_png_file_to_image(everything.img->mlx_ptr, everything.settings->S, &sprite1.texWidth, &sprite1.texHeight);
 	// sprite1.addr = mlx_get_data_addr(sprite1.ind, &sprite1.bits_per_pixel, 
 	// 								&sprite1.line_length, &sprite1.endian);

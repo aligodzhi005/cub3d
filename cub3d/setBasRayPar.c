@@ -6,15 +6,14 @@
 /*   By: rvena <rvena@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 13:54:15 by rvena             #+#    #+#             */
-/*   Updated: 2021/03/21 16:46:12 by rvena            ###   ########.fr       */
+/*   Updated: 2021/04/18 12:44:49 by rvena            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void    setBasRayPar3(ray_data *raycasting, player_data *player, char **map, int x)
+static	void findWall(ray_data *raycasting, char **map)
 {
-	 //where exactly the wall was hit
 	while (raycasting->hit == 0)
 	{
 		//jump to next map square, OR in x-direction, OR in y-direction
@@ -32,7 +31,32 @@ void    setBasRayPar3(ray_data *raycasting, player_data *player, char **map, int
 		}
 		if(map[raycasting->mapY][raycasting->mapX] == '1') 
 			raycasting->hit = 1;
-    }
+	}
+	
+}
+
+void    setBasRayPar3(ray_data *raycasting, player_data *player, char **map, int x)
+{
+	//where exactly the wall was hit
+	findWall(raycasting, map);
+	// while (raycasting->hit == 0)
+	// {
+	// 	//jump to next map square, OR in x-direction, OR in y-direction
+	// 	if(raycasting->sideDistX < raycasting->sideDistY)
+	// 	{
+	// 		raycasting->sideDistX += raycasting->deltaDistX;
+	// 		raycasting->mapX += raycasting->stepX;
+	// 		raycasting->side = 0;
+	// 	}
+	// 	else
+	// 	{
+	// 		raycasting->sideDistY += raycasting->deltaDistY;
+	// 		raycasting->mapY += raycasting->stepY;
+	// 		raycasting->side = 1;
+	// 	}
+	// 	if(map[raycasting->mapY][raycasting->mapX] == '1') 
+	// 		raycasting->hit = 1;
+    // }
     //Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
     if(raycasting->side == 0) 
         raycasting->perpWallDist = (raycasting->mapX - player->posX + (1 - raycasting->stepX) / 2) / raycasting->rayDirX;
@@ -78,10 +102,10 @@ void    setBasRayPar2(ray_data *raycasting, player_data *player, char **map, int
 
 void    setBasRayPar(ray_data *raycasting, player_data *player, int x, char **map, settings *settings)
 {
-    raycasting->cameraX = 2 * x / (double)settings->sW - 1; //x-coordinate in camera space
-    raycasting->rayDirX = player->dirX + player->planeX * raycasting->cameraX;
-    raycasting->rayDirY = player->dirY + player->planeY * raycasting->cameraX;
-    
+	raycasting->cameraX = 2 * x / (double)settings->sW - 1; //x-coordinate in camera space
+	raycasting->rayDirX = player->dirX + player->planeX * raycasting->cameraX;
+	raycasting->rayDirY = player->dirY + player->planeY * raycasting->cameraX;
+
 	raycasting->mapX = (int)player->posX;
 	raycasting->mapY = (int)player->posY;
 	// raycasting->deltaDistX = fabs(1 / raycasting->rayDirX);
