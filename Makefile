@@ -31,9 +31,9 @@ SRCS = setBasRayPar.c \
 	   srcs/init_structs2.c \
 
 OBJS = $(SRCS:.c=.o)
-CC = clang
+CC = gcc
 RM = rm -rf
-CFLAGS = -g -Werror -Wextra -Wall
+CFLAGS = -g -I
 MACFLAGS = -framework OpenGL -framework Appkit
 all:	$(NAME)
 %.o: %.c

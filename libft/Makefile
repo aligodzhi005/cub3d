@@ -50,7 +50,7 @@ SOBJ_BONUS = $(SFILES_BONUS:.c=.o)
 
 CC		= gcc
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	=
 
 HEADER = libft.h
 
